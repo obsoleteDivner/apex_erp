@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :apex_erp, ApexErp.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "apex",
+  password: "apex",
   hostname: "localhost",
-  database: "apex_erp_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "apex_erp_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

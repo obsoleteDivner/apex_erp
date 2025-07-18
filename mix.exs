@@ -27,6 +27,7 @@ defmodule ApexErp.MixProject do
 
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.3"},
       {:phoenix, "~> 1.7.20"},
       {:bandit, "~> 1.5"},
       {:credo, "~> 1.7"},

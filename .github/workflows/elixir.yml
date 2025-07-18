@@ -1,0 +1,58 @@
+name: Elixir CI
+
+on:
+  push:
+
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Build and Test (${{ matrix.os }} / OTP ${{ matrix.otp }} / Elixir ${{ matrix.elixir }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false #
+      matrix:
+        os: [ubuntu-latest]
+        otp: ['25.x', '26.x']
+        elixir: ['1.15.x', '1.16.x'] 
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true 
+
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1 
+      with:
+        otp-version: ${{ matrix.otp }}
+        elixir-version: ${{ matrix.elixir }}
+        install-hex: true
+        install-rebar: true
+
+    - name: Restore Hex and Mix cache
+      uses: actions/cache@v4
+      id: mix-cache 
+      with:
+        path: |
+          ~/.mix
+          ~/.hex
+        key: ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-
+
+    - name: Install dependencies
+      if: steps.mix-cache.outputs.cache-hit != 'true' 
+      run: mix deps.get
+
+    - name: Compile with warnings as errors
+      run: mix compile --warnings-as-errors
+
+    - name: Run Credo (optional, but good for code quality)
+      run: mix credo --strict
+
+    - name: Run tests
+      run: mix test
+      env:
+        MIX_ENV: test 

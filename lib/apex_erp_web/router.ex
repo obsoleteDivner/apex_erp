@@ -17,7 +17,7 @@ defmodule ApexErpWeb.Router do
   scope "/", ApexErpWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", RegistrationLive, :live
   end
 
   # Other scopes may use custom stacks.

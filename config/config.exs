@@ -1,17 +1,9 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 import Config
 
 config :apex_erp,
   ecto_repos: [ApexErp.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-# Configures the endpoint
 config :apex_erp, ApexErpWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
@@ -22,16 +14,8 @@ config :apex_erp, ApexErpWeb.Endpoint,
   pubsub_server: ApexErp.PubSub,
   live_view: [signing_salt: "aVRtGEAV"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
 config :apex_erp, ApexErp.Mailer, adapter: Swoosh.Adapters.Local
 
-# Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
   apex_erp: [
@@ -41,7 +25,6 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
-# Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.3",
   apex_erp: [
@@ -53,16 +36,13 @@ config :tailwind,
     cd: Path.expand("../assets", __DIR__)
   ]
 
-# Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
 config :bcrypt_elixir, log_rounds: 4
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
+
 import_config "#{config_env()}.exs"
